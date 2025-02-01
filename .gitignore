@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/ThunderStore/CHANGELOG.md
+/ThunderStore/manifest.json
+/ThunderStore/README.md
+/Patches/TESTING.cs
+/SteamIDs.txt
