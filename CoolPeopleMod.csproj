@@ -44,6 +44,10 @@
         -->
         <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=./</PathMap>
     </PropertyGroup>
+    <ItemGroup>
+      <None Remove=".gitattributes" />
+      <None Remove=".gitignore" />
+    </ItemGroup>
 
     <!-- Primary Package References -->
     <ItemGroup>
@@ -62,7 +66,6 @@
 
     <ItemGroup>
       <Folder Include="Assets\" />
-      <Folder Include="Items\RatCrown\" />
       <Folder Include="ThunderStore\CoolPeopleMod\" />
     </ItemGroup>
 

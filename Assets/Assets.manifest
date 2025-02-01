@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 1409133542
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: cool_assets
+      Dependencies: {}

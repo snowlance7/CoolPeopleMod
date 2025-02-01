@@ -1,0 +1,76 @@
+ManifestFileVersion: 0
+CRC: 3861969930
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: bbeafeefe75bc48f1ad43a9c961998dc
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: cce39649ee32423f5aafe9df583e8310
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: bbeafeefe75bc48f1ad43a9c961998dc
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 82
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 04f75356a7e9c978bddc7d568e58a50b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c30496d6ae6d6f907456e10a94e01ec6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3c36d0a92cbb1f26a39169ef0eae393a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+- Class: 114
+  Script: {fileID: -322891787, guid: 52761f7ef9fa13d48aafeb6c89eb51c6, type: 3}
+- Class: 114
+  Script: {fileID: 536631715, guid: 52761f7ef9fa13d48aafeb6c89eb51c6, type: 3}
+- Class: 114
+  Script: {fileID: -625747432, guid: 52761f7ef9fa13d48aafeb6c89eb51c6, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 241
+  Script: {instanceID: 0}
+- Class: 243
+  Script: {instanceID: 0}
+- Class: 245
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: Battery
+Assets:
+- Assets/ModAssets/Snowy/PinataPlushItem.asset
+- Assets/ModAssets/Glitch/GlitchPlushItem.asset
+- Assets/ModAssets/Lizzie/SCP999PlushItem.asset
+Dependencies: []
