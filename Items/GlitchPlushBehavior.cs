@@ -112,7 +112,7 @@ namespace CoolPeopleMod
             base.OnHitGround();
 
             if (!isThrown) { return; }
-            Landmine.SpawnExplosion(transform.position, true);
+            Landmine.SpawnExplosion(transform.position + Vector3.up, spawnExplosionEffect: true, 5.7f, 6f);
             isThrown = false;
         }
     }

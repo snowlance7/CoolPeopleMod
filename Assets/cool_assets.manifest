@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3861969930
+CRC: 574543052
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: bbeafeefe75bc48f1ad43a9c961998dc
+    Hash: c9e87e1148b86a4dcc0cddd6cd60ccc2
   TypeTreeHash:
     serializedVersion: 2
-    Hash: cce39649ee32423f5aafe9df583e8310
+    Hash: 76be250fd9e9d7f2403d8087b53834be
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: bbeafeefe75bc48f1ad43a9c961998dc
+    Hash: c9e87e1148b86a4dcc0cddd6cd60ccc2
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -49,14 +49,30 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
 - Class: 114
+  Script: {fileID: -1994157194, guid: 52761f7ef9fa13d48aafeb6c89eb51c6, type: 3}
+- Class: 114
+  Script: {fileID: 971251284, guid: 52761f7ef9fa13d48aafeb6c89eb51c6, type: 3}
+- Class: 114
   Script: {fileID: -322891787, guid: 52761f7ef9fa13d48aafeb6c89eb51c6, type: 3}
 - Class: 114
   Script: {fileID: 536631715, guid: 52761f7ef9fa13d48aafeb6c89eb51c6, type: 3}
 - Class: 114
+  Script: {fileID: 1808846995, guid: 52761f7ef9fa13d48aafeb6c89eb51c6, type: 3}
+- Class: 114
+  Script: {fileID: 1693563759, guid: 52761f7ef9fa13d48aafeb6c89eb51c6, type: 3}
+- Class: 114
   Script: {fileID: -625747432, guid: 52761f7ef9fa13d48aafeb6c89eb51c6, type: 3}
+- Class: 114
+  Script: {fileID: 1989109624, guid: 52761f7ef9fa13d48aafeb6c89eb51c6, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 137
+  Script: {instanceID: 0}
+- Class: 195
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
@@ -71,6 +87,9 @@ SerializeReferenceClassIdentifiers:
   ClassName: Battery
 Assets:
 - Assets/ModAssets/Snowy/PinataPlushItem.asset
+- Assets/ModAssets/Slayer/DiceMimicItem.asset
 - Assets/ModAssets/Glitch/GlitchPlushItem.asset
+- Assets/ModAssets/Rat/RatPlushItem.asset
 - Assets/ModAssets/Lizzie/SCP999PlushItem.asset
+- Assets/ModAssets/Funo/FunoPlushItem.asset
 Dependencies: []

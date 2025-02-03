@@ -12,7 +12,7 @@ namespace CoolPeopleMod.Items
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public Animator ItemAnimator;
         public AudioSource ItemAudio;
-        public AudioClip FunoSFX;
+        public AudioClip[] FunoSFX;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public override void ItemActivate(bool used, bool buttonDown = true)
@@ -22,7 +22,7 @@ namespace CoolPeopleMod.Items
             if (buttonDown)
             {
                 ItemAnimator.SetTrigger("squeeze");
-                ItemAudio.PlayOneShot(FunoSFX);
+                RoundManager.PlayRandomClip(ItemAudio, FunoSFX);
 
                 if (playerHeldBy.playerSteamId == GlitchSteamID || playerHeldBy.playerSteamId == FunoSteamID || TESTING.testing)
                 BlowUpGlitch();

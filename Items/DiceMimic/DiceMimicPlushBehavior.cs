@@ -4,10 +4,12 @@ using GameNetcodeStuff;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 using static CoolPeopleMod.Plugin;
 
 namespace CoolPeopleMod.Items.DiceMimic
@@ -69,7 +71,10 @@ namespace CoolPeopleMod.Items.DiceMimic
 
         void SpawnMimic()
         {
-            throw new NotImplementedException();
+            if (!IsServerOrHost) { return; }
+            GameObject gameObject = Instantiate(Utils.getEnemyByName("Masked").enemyType.enemyPrefab, playerHeldBy.transform.position, Quaternion.identity);
+            gameObject.GetComponentInChildren<NetworkObject>().Spawn(destroyWithScene: true);
+            RoundManager.Instance.SpawnedEnemies.Add(gameObject.GetComponent<EnemyAI>());
         }
 
         bool IsRatInGame()
@@ -127,7 +132,7 @@ namespace CoolPeopleMod.Items.DiceMimic
 
                     if (isThrown)
                     {
-                        Landmine.SpawnExplosion(transform.position, true);
+                        Landmine.SpawnExplosion(transform.position + Vector3.up, spawnExplosionEffect: true, 5.7f, 6f);
                         isThrown = false;
                     }
                     break;
@@ -272,7 +277,7 @@ namespace CoolPeopleMod.Items.DiceMimic
                     HUDManager.Instance.DisplayTip("Pink", "");
 
                     if (UnityEngine.Random.Range(0f, 1f) > PinataPlush.PinataPlushBehavior.explodeChance) { break; }
-                    Landmine.SpawnExplosion(localPlayer.transform.position, true, 3, 3);
+                    Landmine.SpawnExplosion(localPlayer.transform.position + Vector3.up, spawnExplosionEffect: true, 5.7f, 6f);
 
                     break;
                 case 6:

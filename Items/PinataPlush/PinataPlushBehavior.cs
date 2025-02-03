@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Unity.Netcode;
 using UnityEngine;
 using static CoolPeopleMod.Plugin;
 
@@ -13,10 +15,12 @@ namespace CoolPeopleMod.Items.PinataPlush
         public AudioSource ItemAudio;
         public AudioClip AttackSFX;
         public AudioClip PartySFX;
+        public AudioClip ShutUpSnowySFX;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         int damage = 5;
         public static float explodeChance = 0.1f;
+        public static float shutUpSnowyChance = 0.01f;
 
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
@@ -46,6 +50,12 @@ namespace CoolPeopleMod.Items.PinataPlush
         void ActivateRandomCandyEffect()
         {
             if (playerHeldBy != localPlayer) { return; }
+
+            if (UnityEngine.Random.Range(0f, 1f) <= shutUpSnowyChance)
+            {
+                ShutUpSnowyServerRpc();
+                return;
+            }
 
             int index = UnityEngine.Random.Range(0, 7);
 
@@ -84,7 +94,7 @@ namespace CoolPeopleMod.Items.PinataPlush
                     HUDManager.Instance.DisplayTip("Pink", "");
                     
                     if (UnityEngine.Random.Range(0f, 1f) > explodeChance) { break; }
-                    Landmine.SpawnExplosion(localPlayer.transform.position, true, 3, 3);
+                    Landmine.SpawnExplosion(transform.position, spawnExplosionEffect: true, 5.7f, 6f);
 
                     break;
                 case 6:
@@ -99,6 +109,27 @@ namespace CoolPeopleMod.Items.PinataPlush
                 default:
                     break;
             }
+        }
+
+        IEnumerator ShutUpSnowyCoroutine(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            Landmine.SpawnExplosion(transform.position, spawnExplosionEffect: true, 5.7f, 6f);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ShutUpSnowyServerRpc()
+        {
+            if (!IsServerOrHost) { return; }
+            ShutUpSnowyClientRpc();
+        }
+
+        [ClientRpc]
+        public void ShutUpSnowyClientRpc()
+        {
+            ItemAudio.PlayOneShot(ShutUpSnowySFX);
+            StartCoroutine(ShutUpSnowyCoroutine(3f));
+            
         }
     }
 }
