@@ -11,12 +11,11 @@ namespace CoolPeopleMod.Items
         public AudioSource ItemAudio;
         public AudioClip[] HugSFX;
         public AudioClip[] RoamSFX;
-        public ulong LizzieSteamID;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         Coroutine? hugRoutine;
 
-        int healthPerSecond = 2;
+        public static int healthPerSecond = 2;
 
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
@@ -24,7 +23,7 @@ namespace CoolPeopleMod.Items
 
             if (buttonDown)
             {
-                if (playerHeldBy.playerSteamId == LizzieSteamID || playerHeldBy.playerSteamId == snowySteamID || TESTING.testing)
+                if (playerHeldBy.playerSteamId == LizzieSteamID || playerHeldBy.playerSteamId == SnowySteamID || TESTING.testing)
                 {
                     RoundManager.PlayRandomClip(ItemAudio, HugSFX);
                     if (hugRoutine == null)

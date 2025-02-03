@@ -16,6 +16,7 @@ namespace CoolPeopleMod.Items.PinataPlush
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         int damage = 5;
+        public static float explodeChance = 0.1f;
 
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
@@ -23,7 +24,7 @@ namespace CoolPeopleMod.Items.PinataPlush
 
             if (buttonDown)
             {
-                if (playerHeldBy.playerSteamId == snowySteamID || TESTING.testing)
+                if (playerHeldBy.playerSteamId == SnowySteamID || TESTING.testing)
                 {
                     ItemAnimator.SetTrigger("squeeze");
                     ItemAudio.PlayOneShot(PartySFX);
@@ -81,6 +82,8 @@ namespace CoolPeopleMod.Items.PinataPlush
                     break;
                 case 5:
                     HUDManager.Instance.DisplayTip("Pink", "");
+                    
+                    if (UnityEngine.Random.Range(0f, 1f) > explodeChance) { break; }
                     Landmine.SpawnExplosion(localPlayer.transform.position, true, 3, 3);
 
                     break;

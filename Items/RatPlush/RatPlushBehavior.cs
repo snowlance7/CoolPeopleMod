@@ -14,8 +14,6 @@ namespace CoolPeopleMod.Items.RatPlush
     internal class RatPlushBehavior : PhysicsProp
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public ulong RatSteamID;
-        public ulong SlayerSteamID;
         public AudioSource ItemAudio;
         public AudioClip[] BirthdaySFX;
         public Animator ItemAnimator;
@@ -52,7 +50,8 @@ namespace CoolPeopleMod.Items.RatPlush
         void TrySpawnRatOnServer()
         {
             if (!IsServerOrHost) { return; }
-            if (!CalculatePath(playerHeldBy.transform.position, mainEntrancePosition)) { return; }
+            if (!playerHeldBy.isInsideFactory) { return; }
+            if (!Utils.CalculatePath(playerHeldBy.transform.position, mainEntrancePosition)) { return; }
             if (currentRat != null)
             {
                 currentRat.DisappearClientRpc();
@@ -76,15 +75,6 @@ namespace CoolPeopleMod.Items.RatPlush
             }
 
             return false;
-        }
-
-        public static bool CalculatePath(Vector3 fromPos, Vector3 toPos)
-        {
-            Vector3 from = RoundManager.Instance.GetNavMeshPosition(fromPos, RoundManager.Instance.navHit, 1.75f);
-            Vector3 to = RoundManager.Instance.GetNavMeshPosition(toPos, RoundManager.Instance.navHit, 1.75f);
-
-            NavMeshPath path = new();
-            return NavMesh.CalculatePath(from, to, -1, path) && Vector3.Distance(path.corners[path.corners.Length - 1], RoundManager.Instance.GetNavMeshPosition(to, RoundManager.Instance.navHit, 2.7f)) <= 1.55f; // TODO: Test this
         }
     }
 }

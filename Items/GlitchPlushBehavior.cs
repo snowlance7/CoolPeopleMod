@@ -21,8 +21,6 @@ namespace CoolPeopleMod
         public AudioClip BaldSFX;
         public AudioClip DefaultSFX;
         public AudioClip RodrigoSFX;
-        public ulong GlitchSteamID;
-        public ulong RodrigoSteamID;
         public Animator ItemAnimator;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -36,7 +34,7 @@ namespace CoolPeopleMod
         {
             base.ItemActivate(used, buttonDown);
 
-            if (playerHeldBy.playerSteamId == snowySteamID || playerHeldBy.playerSteamId == GlitchSteamID || TESTING.testing)
+            if (playerHeldBy.playerSteamId == SnowySteamID || playerHeldBy.playerSteamId == GlitchSteamID || TESTING.testing)
             {
                 isThrown = true;
                 playerHeldBy.DiscardHeldObject(placeObject: true, null, GetGrenadeThrowDestination(playerHeldBy.gameplayCamera.transform));
@@ -77,25 +75,18 @@ namespace CoolPeopleMod
 
         public override void FallWithCurve()
         {
-            // Log initial state
-            logger.LogDebug($"cFallWithCurve called. Start Position: {startFallingPosition}, Target Position: {targetFloorPosition}, Initial cfallTime: {fallTime}");
-
             float magnitude = (startFallingPosition - targetFloorPosition).magnitude;
-            logger.LogDebug($"Calculated magnitude: {magnitude}");
 
             // Log rotation interpolation
             Quaternion targetRotation = Quaternion.Euler(itemProperties.restingRotation.x, base.transform.eulerAngles.y, itemProperties.restingRotation.z);
             base.transform.rotation = Quaternion.Lerp(base.transform.rotation, targetRotation, 14f * Time.deltaTime / magnitude);
-            logger.LogDebug($"Updated rotation to: {base.transform.rotation.eulerAngles}");
 
             // Log position interpolation for primary fall
             base.transform.localPosition = Vector3.Lerp(startFallingPosition, targetFloorPosition, grenadeFallCurve.Evaluate(fallTime));
-            logger.LogDebug($"Updated primary fall position to: {base.transform.localPosition}");
 
             // Conditional logging for vertical fall curve
             if (magnitude > 5f)
             {
-                logger.LogDebug("Magnitude > 5, using grenadeVerticalFallCurveNoBounce.");
                 base.transform.localPosition = Vector3.Lerp(
                     new Vector3(base.transform.localPosition.x, startFallingPosition.y, base.transform.localPosition.z),
                     new Vector3(base.transform.localPosition.x, targetFloorPosition.y, base.transform.localPosition.z),
@@ -104,7 +95,6 @@ namespace CoolPeopleMod
             }
             else
             {
-                logger.LogDebug("Magnitude <= 5, using grenadeVerticalFallCurve.");
                 base.transform.localPosition = Vector3.Lerp(
                     new Vector3(base.transform.localPosition.x, startFallingPosition.y, base.transform.localPosition.z),
                     new Vector3(base.transform.localPosition.x, targetFloorPosition.y, base.transform.localPosition.z),
@@ -113,16 +103,13 @@ namespace CoolPeopleMod
             }
 
             // Log updated position and fallTime
-            logger.LogDebug($"Updated local position after vertical fall: {base.transform.localPosition}");
 
             fallTime += Mathf.Abs(Time.deltaTime * 12f / magnitude);
-            logger.LogDebug($"Updated cfallTime to: {fallTime}");
         }
 
         public override void OnHitGround()
         {
             base.OnHitGround();
-            logger.LogDebug("Hit ground");
 
             if (!isThrown) { return; }
             Landmine.SpawnExplosion(transform.position, true);

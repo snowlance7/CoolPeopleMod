@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
+using static CoolPeopleMod.Plugin;
 
 namespace CoolPeopleMod.Items.RatPlush
 {
@@ -14,6 +15,7 @@ namespace CoolPeopleMod.Items.RatPlush
         public AudioClip BirthdayMixtapeSFX;
         public NavMeshAgent agent;
         public float AIIntervalTime;
+        public ParticleSystem particleSystem;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         float timeSinceAIInterval;
@@ -21,16 +23,16 @@ namespace CoolPeopleMod.Items.RatPlush
         NavMeshPath path1;
         bool moveTowardsDestination;
         Vector3 destination;
+        bool inSpecialAnimation;
 
         public void Start()
         {
             mainEntrancePosition = RoundManager.FindMainEntrancePosition(true);
-
-            
         }
 
         public void Update()
         {
+            if (!IsServerOrHost) { return; }
             timeSinceAIInterval += Time.deltaTime;
             if (timeSinceAIInterval > AIIntervalTime)
             {
@@ -41,6 +43,7 @@ namespace CoolPeopleMod.Items.RatPlush
 
         void DoAIInterval()
         {
+            if (inSpecialAnimation) { return; }
             if (moveTowardsDestination)
             {
                 agent.SetDestination(destination);
@@ -48,7 +51,8 @@ namespace CoolPeopleMod.Items.RatPlush
 
             if (!SetDestinationToPosition(mainEntrancePosition, true) || Vector3.Distance(transform.position, mainEntrancePosition) < 1f)
             {
-                Disappear();
+                inSpecialAnimation = true;
+                DisappearClientRpc();
             }
         }
 
@@ -74,13 +78,21 @@ namespace CoolPeopleMod.Items.RatPlush
 
         public void Disappear()
         {
+            particleSystem.Play();
+            if (!IsServerOrHost) { return; }
+            StartCoroutine(DisappearCoroutine(1f));
+        }
 
+        IEnumerator DisappearCoroutine(float delay)
+        {
+            yield return new WaitForSecondsRealtime(delay);
+            NetworkObject.Despawn(destroy: true);
         }
 
         [ClientRpc]
         public void DisappearClientRpc()
         {
-
+            Disappear();
         }
     }
 }
