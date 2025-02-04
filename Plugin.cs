@@ -113,20 +113,20 @@ namespace CoolPeopleMod
             // DiceMimicPlush Configs
             configDiceMimicPlushLevelRarities = Config.Bind("DiceMimicPlush", "Level Rarities", "All: 10", "Rarities for each level. See default for formatting.");
             configDiceMimicPlushCustomLevelRarities = Config.Bind("DiceMimicPlush", "Custom Level Rarities", "", "Rarities for modded levels. Same formatting as level rarities.");
-            configDiceMimicPlushMinValue = Config.Bind("DiceMimicPlush", "Min Value", 100, "Minimum scrap value.");
-            configDiceMimicPlushMaxValue = Config.Bind("DiceMimicPlush", "Max Value", 180, "Maximum scrap value.");
+            configDiceMimicPlushMinValue = Config.Bind("DiceMimicPlush", "Min Value", 150, "Minimum scrap value.");
+            configDiceMimicPlushMaxValue = Config.Bind("DiceMimicPlush", "Max Value", 200, "Maximum scrap value.");
 
             // RatPlush Configs
             configRatPlushLevelRarities = Config.Bind("RatPlush", "Level Rarities", "All: 12", "Rarities for each level. See default for formatting.");
             configRatPlushCustomLevelRarities = Config.Bind("RatPlush", "Custom Level Rarities", "", "Rarities for modded levels. Same formatting as level rarities.");
-            configRatPlushMinValue = Config.Bind("RatPlush", "Min Value", 120, "Minimum scrap value.");
-            configRatPlushMaxValue = Config.Bind("RatPlush", "Max Value", 190, "Maximum scrap value.");
+            configRatPlushMinValue = Config.Bind("RatPlush", "Min Value", 150, "Minimum scrap value.");
+            configRatPlushMaxValue = Config.Bind("RatPlush", "Max Value", 200, "Maximum scrap value.");
 
             // FunoPlush Configs
             configFunoPlushLevelRarities = Config.Bind("FunoPlush", "Level Rarities", "All: 8", "Rarities for each level. See default for formatting.");
             configFunoPlushCustomLevelRarities = Config.Bind("FunoPlush", "Custom Level Rarities", "", "Rarities for modded levels. Same formatting as level rarities.");
-            configFunoPlushMinValue = Config.Bind("FunoPlush", "Min Value", 130, "Minimum scrap value.");
-            configFunoPlushMaxValue = Config.Bind("FunoPlush", "Max Value", 210, "Maximum scrap value.");
+            configFunoPlushMinValue = Config.Bind("FunoPlush", "Min Value", 150, "Minimum scrap value.");
+            configFunoPlushMaxValue = Config.Bind("FunoPlush", "Max Value", 200, "Maximum scrap value.");
 
             new StatusEffectController();
 

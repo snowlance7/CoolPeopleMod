@@ -9,7 +9,6 @@ public class Spinner : MonoBehaviour
     private float NormalSpinVelocity = 90f;
     private float CurrentTimer = 0f;
     private float SpinningTime = 3f;
-    public bool SurfacedDie = false;
 
     private Quaternion InitialRotation;
     private Quaternion FromRotation;
@@ -39,12 +38,17 @@ public class Spinner : MonoBehaviour
         {
             CurrentTimer += Time.deltaTime;
             if (CurrentTimer >= SpinningTime)
+            {
                 StopHyperSpinning();
+                CurrentTimer = 0f;
+            }
         }
 
         if (!IsBeingUsed)
-            if (SurfacedDie) transform.Rotate(Vector3.forward, NormalSpinVelocity * Time.deltaTime);
-            else transform.Rotate(Vector3.up, NormalSpinVelocity * Time.deltaTime);
+        {
+            //transform.Rotate(Vector3.up, NormalSpinVelocity * Time.deltaTime);
+            transform.Rotate(Vector3.forward, NormalSpinVelocity * Time.deltaTime);
+        }
         else
         {
             SpinVelocity += SpinAcceleration * Time.deltaTime;
@@ -52,7 +56,5 @@ public class Spinner : MonoBehaviour
             transform.Rotate(Vector3.forward, SpinVelocity * Time.deltaTime);
             transform.Rotate(Vector3.right, SpinVelocity * Time.deltaTime);
         }
-
-
     }
 }

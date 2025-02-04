@@ -71,7 +71,7 @@ namespace CoolPeopleMod.Items.DiceMimic
 
         void SpawnMimic()
         {
-            if (!IsServerOrHost) { return; }
+            if (!IsServerOrHost || !TESTING.mimic) { return; }
             GameObject gameObject = Instantiate(Utils.getEnemyByName("Masked").enemyType.enemyPrefab, playerHeldBy.transform.position, Quaternion.identity);
             gameObject.GetComponentInChildren<NetworkObject>().Spawn(destroyWithScene: true);
             RoundManager.Instance.SpawnedEnemies.Add(gameObject.GetComponent<EnemyAI>());
@@ -375,12 +375,12 @@ namespace CoolPeopleMod.Items.DiceMimic
         #region FunoPlushBehavior
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public AudioClip FunoSFX;
+        public AudioClip[] FunoSFX;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         void DoFunoPlushBehavior()
         {
-            ItemAudio.PlayOneShot(FunoSFX);
+            RoundManager.PlayRandomClip(ItemAudio, FunoSFX);
             BlowUpGlitch();
         }
 

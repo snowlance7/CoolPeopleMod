@@ -80,7 +80,8 @@ namespace CoolPeopleMod.Items.RatPlush
         {
             particleSystem.Play();
             if (!IsServerOrHost) { return; }
-            StartCoroutine(DisappearCoroutine(1f));
+            //StartCoroutine(DisappearCoroutine(0.5f));
+            NetworkObject.Despawn(destroy: true);
         }
 
         IEnumerator DisappearCoroutine(float delay)

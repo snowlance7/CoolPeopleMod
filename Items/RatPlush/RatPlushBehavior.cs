@@ -21,13 +21,6 @@ namespace CoolPeopleMod.Items.RatPlush
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         RatScript? currentRat;
-        Vector3 mainEntrancePosition;
-
-        public override void Start()
-        {
-            base.Start();
-            mainEntrancePosition = RoundManager.FindMainEntrancePosition(true);
-        }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
@@ -40,7 +33,7 @@ namespace CoolPeopleMod.Items.RatPlush
 
                 if (IsSlayerInGame()) { return; }
 
-                if (playerHeldBy.playerSteamId == RatSteamID)
+                if (playerHeldBy.playerSteamId == RatSteamID || TESTING.testing)
                 {
                     TrySpawnRatOnServer();
                 }
@@ -51,6 +44,7 @@ namespace CoolPeopleMod.Items.RatPlush
         {
             if (!IsServerOrHost) { return; }
             if (!playerHeldBy.isInsideFactory) { return; }
+            Vector3 mainEntrancePosition = RoundManager.FindMainEntrancePosition(true);
             if (!Utils.CalculatePath(playerHeldBy.transform.position, mainEntrancePosition)) { return; }
             if (currentRat != null)
             {

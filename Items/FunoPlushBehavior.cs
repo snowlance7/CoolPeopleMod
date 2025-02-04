@@ -13,7 +13,18 @@ namespace CoolPeopleMod.Items
         public Animator ItemAnimator;
         public AudioSource ItemAudio;
         public AudioClip[] FunoSFX;
+        public Material BlackMat;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+        public override void Start()
+        {
+            base.Start();
+
+            if (localPlayer.playerSteamId == GlitchSteamID || TESTING.testing)
+            {
+                mainObjectRenderer.material = BlackMat;
+            }
+        }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
         {

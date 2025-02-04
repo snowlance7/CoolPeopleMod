@@ -22,13 +22,35 @@ namespace CoolPeopleMod
         public AudioClip DefaultSFX;
         public AudioClip RodrigoSFX;
         public Animator ItemAnimator;
+        public Material HairMat;
+        public SkinnedMeshRenderer HairRenderer;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+        System.Random? random;
+        bool initializedRandomSeed;
 
         Ray grenadeThrowRay;
         RaycastHit grenadeHit;
         int stunGrenadeMask = 268437761;
+        int explodeGlitchChance = 500;
 
         bool isThrown;
+
+        public override void Start()
+        {
+            base.Start();
+
+            if (!RoundManager.Instance.hasInitializedLevelRandomSeed)
+            {
+                RoundManager.Instance.InitializeRandomNumberGenerators();
+            }
+            logger.LogDebug("initialized random number generators");
+
+            if (localPlayer.playerSteamId == GlitchSteamID || TESTING.testing)
+            {
+                HairRenderer.material = HairMat;
+            }
+        }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
@@ -36,6 +58,20 @@ namespace CoolPeopleMod
 
             if (playerHeldBy.playerSteamId == SnowySteamID || playerHeldBy.playerSteamId == GlitchSteamID || TESTING.testing)
             {
+                if (!initializedRandomSeed)
+                {
+                    int seed = StartOfRound.Instance.randomMapSeed + 158;
+                    logger.LogDebug("Assigning new random with seed: " + seed);
+                    random = new System.Random(seed);
+                    initializedRandomSeed = true;
+                }
+
+                if (random!.Next(1, explodeGlitchChance + 1) == 1)
+                {
+                    Landmine.SpawnExplosion(transform.position, spawnExplosionEffect: true, 5.7f, 6f);
+                    return;
+                }
+
                 isThrown = true;
                 playerHeldBy.DiscardHeldObject(placeObject: true, null, GetGrenadeThrowDestination(playerHeldBy.gameplayCamera.transform));
                 ItemAudio.PlayOneShot(BaldSFX);
@@ -112,7 +148,7 @@ namespace CoolPeopleMod
             base.OnHitGround();
 
             if (!isThrown) { return; }
-            Landmine.SpawnExplosion(transform.position + Vector3.up, spawnExplosionEffect: true, 5.7f, 6f);
+            Landmine.SpawnExplosion(transform.position + Vector3.up, spawnExplosionEffect: true, 1f, 5.7f);
             isThrown = false;
         }
     }

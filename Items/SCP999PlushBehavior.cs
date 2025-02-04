@@ -43,7 +43,7 @@ namespace CoolPeopleMod.Items
         {
             ItemAnimator.SetBool("hug", true);
 
-            while (playerHeldBy != null && playerHeldBy.health < 100)
+            while (playerHeldBy != null && playerHeldBy.health < 100 && !isPocketed)
             {
                 playerHeldBy.health += healthPerSecond;
                 
