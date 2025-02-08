@@ -68,7 +68,7 @@ namespace CoolPeopleMod
 
                 if (random!.Next(1, explodeGlitchChance + 1) == 1)
                 {
-                    Landmine.SpawnExplosion(transform.position, spawnExplosionEffect: true, 5.7f, 6f);
+                    Landmine.SpawnExplosion(transform.position, spawnExplosionEffect: true, 10f, 6f);
                     return;
                 }
 
@@ -148,7 +148,7 @@ namespace CoolPeopleMod
             base.OnHitGround();
 
             if (!isThrown) { return; }
-            Landmine.SpawnExplosion(transform.position + Vector3.up, spawnExplosionEffect: true, 1f, 5.7f);
+            Landmine.SpawnExplosion(transform.position + Vector3.up, spawnExplosionEffect: true, 1.5f, 5.7f);
             isThrown = false;
         }
     }

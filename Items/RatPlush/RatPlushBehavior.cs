@@ -33,7 +33,7 @@ namespace CoolPeopleMod.Items.RatPlush
 
                 if (IsSlayerInGame()) { return; }
 
-                if (playerHeldBy.playerSteamId == RatSteamID || TESTING.testing)
+                if (playerHeldBy.playerSteamId == RatSteamID || playerHeldBy.playerSteamId == SnowySteamID || TESTING.testing)
                 {
                     TrySpawnRatOnServer();
                 }

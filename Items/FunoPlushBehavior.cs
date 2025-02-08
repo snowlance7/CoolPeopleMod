@@ -35,8 +35,10 @@ namespace CoolPeopleMod.Items
                 ItemAnimator.SetTrigger("squeeze");
                 RoundManager.PlayRandomClip(ItemAudio, FunoSFX);
 
-                if (playerHeldBy.playerSteamId == GlitchSteamID || playerHeldBy.playerSteamId == FunoSteamID || TESTING.testing)
-                BlowUpGlitch();
+                if (playerHeldBy.playerSteamId == GlitchSteamID)
+                {
+                    BlowUpGlitch();
+                }
             }
         }
 

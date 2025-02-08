@@ -19,7 +19,7 @@ namespace CoolPeopleMod.Items.PinataPlush
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         int damage = 5;
-        public static float explodeChance = 0.1f;
+        public static float explodeChance = 0.2f;
         public static float shutUpSnowyChance = 0.01f;
 
         public override void ItemActivate(bool used, bool buttonDown = true)

@@ -27,24 +27,10 @@ namespace CoolPeopleMod.Items.DiceMimic
         public Spinner DiceScript;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        System.Random? random;
-        bool initializedRandomSeed;
-
         bool isThrown;
 
         const int plushieCount = 5;
         int currentBehavior;
-
-        public override void Start()
-        {
-            base.Start();
-
-            if (!RoundManager.Instance.hasInitializedLevelRandomSeed)
-            {
-                RoundManager.Instance.InitializeRandomNumberGenerators();
-            }
-            logger.LogDebug("initialized random number generators");
-        }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
@@ -56,25 +42,21 @@ namespace CoolPeopleMod.Items.DiceMimic
                 ItemAnimator.SetTrigger("squeeze");
                 DiceScript.StartHyperSpinning(3f);
 
+                if (playerHeldBy != localPlayer) { return; }
+
                 if (IsRatInGame()) { return; }
 
                 if (playerHeldBy.playerSteamId == SlayerSteamID || playerHeldBy.playerSteamId == SnowySteamID || TESTING.testing)
                 {
-                    DoRandomPlushieEffect();
+                    int index = UnityEngine.Random.Range(0, plushieCount + 1);
+
+                    DoPlushieEffectServerRpc(index);
                 }
                 else
                 {
-                    SpawnMimic();
+                    SpawnMimicServerRpc();
                 }
             }
-        }
-
-        void SpawnMimic()
-        {
-            if (!IsServerOrHost || !TESTING.mimic) { return; }
-            GameObject gameObject = Instantiate(Utils.getEnemyByName("Masked").enemyType.enemyPrefab, playerHeldBy.transform.position, Quaternion.identity);
-            gameObject.GetComponentInChildren<NetworkObject>().Spawn(destroyWithScene: true);
-            RoundManager.Instance.SpawnedEnemies.Add(gameObject.GetComponent<EnemyAI>());
         }
 
         bool IsRatInGame()
@@ -90,17 +72,9 @@ namespace CoolPeopleMod.Items.DiceMimic
             return false;
         }
 
-        void DoRandomPlushieEffect()
+        void DoPlushieEffect(int index)
         {
-            if (!initializedRandomSeed)
-            {
-                int seed = StartOfRound.Instance.randomMapSeed + 158;
-                logger.LogDebug("Assigning new random with seed: " + seed);
-                random = new System.Random(seed);
-                initializedRandomSeed = true;
-            }
-
-            currentBehavior = random!.Next(1, plushieCount + 1);
+            currentBehavior = index;
 
             switch (currentBehavior)
             {
@@ -381,20 +355,37 @@ namespace CoolPeopleMod.Items.DiceMimic
         void DoFunoPlushBehavior()
         {
             RoundManager.PlayRandomClip(ItemAudio, FunoSFX);
-            BlowUpGlitch();
-        }
-
-        void BlowUpGlitch()
-        {
-            foreach (PlayerControllerB player in StartOfRound.Instance.allPlayerScripts)
-            {
-                if (player != null && player.playerSteamId == GlitchSteamID)
-                {
-                    Landmine.SpawnExplosion(player.transform.position + Vector3.up, spawnExplosionEffect: true, 5.7f, 6f);
-                }
-            }
         }
 
         #endregion
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SpawnMimicServerRpc()
+        {
+            if (!IsServerOrHost) { return; }
+            SpawnMimicClientRpc();
+        }
+
+        [ClientRpc]
+        public void SpawnMimicClientRpc()
+        {
+            if (!IsServerOrHost || !TESTING.mimic) { return; }
+            GameObject gameObject = Instantiate(Utils.getEnemyByName("Masked").enemyType.enemyPrefab, playerHeldBy.transform.position, Quaternion.identity);
+            gameObject.GetComponentInChildren<NetworkObject>().Spawn(destroyWithScene: true);
+            RoundManager.Instance.SpawnedEnemies.Add(gameObject.GetComponent<EnemyAI>());
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void DoPlushieEffectServerRpc(int index)
+        {
+            if (!IsServerOrHost) { return; }
+            DoPlushieEffectClientRpc(index);
+        }
+
+        [ClientRpc]
+        public void DoPlushieEffectClientRpc(int index)
+        {
+            DoPlushieEffect(index);
+        }
     }
 }
