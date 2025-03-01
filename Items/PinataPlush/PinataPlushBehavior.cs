@@ -76,15 +76,38 @@ namespace CoolPeopleMod.Items.PinataPlush
                     TeleportPlayerToRandomNode(playerHeldBy);
                 }
             }
+            else
+            {
+                if (playerHeldBy.playerSteamId == SnowySteamID || TESTING.testing)
+                {
+                    ItemAnimator.SetTrigger("headbutt");
+                }
+            }
         }
 
         public void DamagePlayerHeldBy() // Animation function for "headbutt"
         {
             PlayerControllerB player = playerHeldBy;
             ItemAudio.PlayOneShot(AttackSFX);
-            player.DamagePlayer(damage, false, false, CauseOfDeath.Bludgeoning, 7, false, player.transform.forward * 10f);
+
+            if (player.playerSteamId == SnowySteamID || TESTING.testing)
+            {
+                CatchTheBus();
+                return;
+            }
+
             player.DiscardHeldObject();
+            player.DamagePlayer(damage, false, false, CauseOfDeath.Bludgeoning, 7, false, player.transform.forward * 10f);
             TeleportPlayerToRandomNode(player);
+        }
+
+        void CatchTheBus()
+        {
+            if (playerHeldBy.playerSteamId == SnowySteamID || TESTING.testing)
+            {
+                if (localPlayer != playerHeldBy) { return; }
+                playerHeldBy.KillPlayer(Vector3.zero, false, CauseOfDeath.Unknown, 0);
+            }
         }
 
         public void TeleportPlayerToRandomNode(PlayerControllerB player)
