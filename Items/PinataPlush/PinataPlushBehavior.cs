@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameNetcodeStuff;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -20,11 +21,32 @@ namespace CoolPeopleMod.Items.PinataPlush
 
         int damage = 5;
         public static float explodeChance = 0.2f;
-        public static float shutUpSnowyChance = 0.01f;
+        public static float shutUpSnowyChance = 0.1f;
+        bool shutUpSnowy;
+
+        public override void EquipItem()
+        {
+            base.EquipItem();
+            playerHeldBy.equippedUsableItemQE = true;
+        }
+
+        public override void DiscardItem()
+        {
+            base.DiscardItem();
+            playerHeldBy.equippedUsableItemQE = false;
+        }
+
+        public override void PocketItem()
+        {
+            base.PocketItem();
+            playerHeldBy.equippedUsableItemQE = false;
+        }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
             base.ItemActivate(used, buttonDown);
+            
+            if (shutUpSnowy) { return; }
 
             if (buttonDown)
             {
@@ -41,10 +63,36 @@ namespace CoolPeopleMod.Items.PinataPlush
             }
         }
 
-        public void DamagePlayerHeldBy()
+        public override void ItemInteractLeftRight(bool right) // TODO: Test this
         {
+            base.ItemInteractLeftRight(right);
+
+            if (right)
+            {
+                if (playerHeldBy.playerSteamId == SnowySteamID || TESTING.testing)
+                {
+                    ItemAnimator.SetTrigger("squeeze");
+                    ItemAudio.PlayOneShot(PartySFX);
+                    TeleportPlayerToRandomNode(playerHeldBy);
+                }
+            }
+        }
+
+        public void DamagePlayerHeldBy() // Animation function for "headbutt"
+        {
+            PlayerControllerB player = playerHeldBy;
             ItemAudio.PlayOneShot(AttackSFX);
-            playerHeldBy.DamagePlayer(damage, false, false, CauseOfDeath.Bludgeoning, 7, false, playerHeldBy.transform.forward * 10f);
+            player.DamagePlayer(damage, false, false, CauseOfDeath.Bludgeoning, 7, false, player.transform.forward * 10f);
+            player.DiscardHeldObject();
+            TeleportPlayerToRandomNode(player);
+        }
+
+        public void TeleportPlayerToRandomNode(PlayerControllerB player)
+        {
+            Transform? randomNode = Utils.GetRandomNode();
+
+            if (randomNode == null) { return; }
+            player.TeleportPlayer(randomNode.position);
         }
 
         void ActivateRandomCandyEffect()
@@ -53,6 +101,7 @@ namespace CoolPeopleMod.Items.PinataPlush
 
             if (UnityEngine.Random.Range(0f, 1f) <= shutUpSnowyChance)
             {
+                shutUpSnowy = true;
                 ShutUpSnowyServerRpc();
                 return;
             }
@@ -115,6 +164,7 @@ namespace CoolPeopleMod.Items.PinataPlush
         {
             yield return new WaitForSeconds(delay);
             Landmine.SpawnExplosion(transform.position, spawnExplosionEffect: true, 5.7f, 6f);
+            shutUpSnowy = false;
         }
 
         [ServerRpc(RequireOwnership = false)]

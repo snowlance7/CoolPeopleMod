@@ -157,6 +157,35 @@ namespace CoolPeopleMod.Items.DiceMimic
             }
         }
 
+        [ServerRpc(RequireOwnership = false)]
+        public void SpawnMimicServerRpc()
+        {
+            if (!IsServerOrHost) { return; }
+            SpawnMimicClientRpc();
+        }
+
+        [ClientRpc]
+        public void SpawnMimicClientRpc()
+        {
+            if (!IsServerOrHost || !TESTING.mimic) { return; }
+            GameObject gameObject = Instantiate(Utils.getEnemyByName("Masked").enemyType.enemyPrefab, playerHeldBy.transform.position, Quaternion.identity);
+            gameObject.GetComponentInChildren<NetworkObject>().Spawn(destroyWithScene: true);
+            RoundManager.Instance.SpawnedEnemies.Add(gameObject.GetComponent<EnemyAI>());
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void DoPlushieEffectServerRpc(int index)
+        {
+            if (!IsServerOrHost) { return; }
+            DoPlushieEffectClientRpc(index);
+        }
+
+        [ClientRpc]
+        public void DoPlushieEffectClientRpc(int index)
+        {
+            DoPlushieEffect(index);
+        }
+
         #region GlitchPlushBehavior
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public AnimationCurve grenadeFallCurve;
@@ -355,37 +384,63 @@ namespace CoolPeopleMod.Items.DiceMimic
         void DoFunoPlushBehavior()
         {
             RoundManager.PlayRandomClip(ItemAudio, FunoSFX);
+
+            Landmine.SpawnExplosion(playerHeldBy.transform.position + Vector3.up, true, 0f, 5f, 1, 100f);
+            PushNearbyPlayers();
+        }
+
+        Vector3 GetDirectionToPlayer(PlayerControllerB player)
+        {
+            return (player.transform.position - transform.position).normalized;
+        }
+
+        public void PushNearbyPlayers()
+        {
+            foreach (var player in StartOfRound.Instance.allPlayerScripts)
+            {
+                if (!player.isPlayerControlled || player == playerHeldBy) { continue; }
+                if (Vector3.Distance(transform.position, player.transform.position) > FunoPlushBehavior.pushDistance) { continue; }
+
+                Vector3 pushDirection = GetDirectionToPlayer(player);
+                player.playerRigidbody.isKinematic = false;
+                player.playerRigidbody.velocity = Vector3.zero;
+                player.externalForceAutoFade += pushDirection * FunoPlushBehavior.pushForce;
+                DropBabyIfHolding(player);
+
+                player.playerRigidbody.isKinematic = true;
+            }
+        }
+
+        void DropBabyIfHolding(PlayerControllerB player)
+        {
+            if (player.currentlyHeldObjectServer != null && player.currentlyHeldObjectServer.itemProperties.name == "CaveDwellerBaby")
+            {
+                player.DiscardHeldObject();
+            }
         }
 
         #endregion
 
-        [ServerRpc(RequireOwnership = false)]
-        public void SpawnMimicServerRpc()
-        {
-            if (!IsServerOrHost) { return; }
-            SpawnMimicClientRpc();
-        }
+        #region LunxaraPlush
 
-        [ClientRpc]
-        public void SpawnMimicClientRpc()
-        {
-            if (!IsServerOrHost || !TESTING.mimic) { return; }
-            GameObject gameObject = Instantiate(Utils.getEnemyByName("Masked").enemyType.enemyPrefab, playerHeldBy.transform.position, Quaternion.identity);
-            gameObject.GetComponentInChildren<NetworkObject>().Spawn(destroyWithScene: true);
-            RoundManager.Instance.SpawnedEnemies.Add(gameObject.GetComponent<EnemyAI>());
-        }
 
-        [ServerRpc(RequireOwnership = false)]
-        public void DoPlushieEffectServerRpc(int index)
-        {
-            if (!IsServerOrHost) { return; }
-            DoPlushieEffectClientRpc(index);
-        }
 
-        [ClientRpc]
-        public void DoPlushieEffectClientRpc(int index)
-        {
-            DoPlushieEffect(index);
-        }
+        #endregion
+
+        #region LeverPlush
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public AudioClip LeverPullSFX;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+        #endregion
+
+        #region RedrigoPlush
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public GameObject SeaminePrefab;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+        #endregion
     }
 }

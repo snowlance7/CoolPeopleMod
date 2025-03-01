@@ -60,5 +60,20 @@ namespace CoolPeopleMod
             }
             return enemy;
         }
+
+        public static Transform? GetRandomNode(bool outside = false)
+        {
+            try
+            {
+                GameObject[] nodes = outside ? RoundManager.Instance.outsideAINodes : RoundManager.Instance.insideAINodes;
+
+                int randIndex = UnityEngine.Random.Range(0, nodes.Length);
+                return nodes[randIndex].transform;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }
