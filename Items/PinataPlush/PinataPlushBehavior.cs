@@ -19,27 +19,42 @@ namespace CoolPeopleMod.Items.PinataPlush
         public AudioClip ShutUpSnowySFX;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
+        PlayerControllerB? previousPlayerHeldBy;
+
         int damage = 5;
         public static float explodeChance = 0.2f;
         public static float shutUpSnowyChance = 0.1f;
         bool shutUpSnowy;
 
+        public override void Update()
+        {
+            base.Update();
+
+            if (playerHeldBy != null)
+            {
+                previousPlayerHeldBy = playerHeldBy;
+            }
+        }
+
         public override void EquipItem()
         {
             base.EquipItem();
+            if (playerHeldBy == null) { return; }
             playerHeldBy.equippedUsableItemQE = true;
         }
 
         public override void DiscardItem()
         {
             base.DiscardItem();
-            playerHeldBy.equippedUsableItemQE = false;
+            if (previousPlayerHeldBy == null) { return; }
+            previousPlayerHeldBy.equippedUsableItemQE = false;
         }
 
         public override void PocketItem()
         {
             base.PocketItem();
-            playerHeldBy.equippedUsableItemQE = false;
+            if (previousPlayerHeldBy == null) { return; }
+            previousPlayerHeldBy.equippedUsableItemQE = false;
         }
 
         public override void ItemActivate(bool used, bool buttonDown = true)

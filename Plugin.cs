@@ -19,8 +19,11 @@ namespace CoolPeopleMod
     [BepInDependency(LethalLib.Plugin.ModGUID)]
     public class Plugin : BaseUnityPlugin
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public static Plugin PluginInstance;
         public static ManualLogSource LoggerInstance;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+        
         private readonly Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         public static PlayerControllerB localPlayer { get { return GameNetworkManager.Instance.localPlayerController; } }
         public static PlayerControllerB PlayerFromId(ulong id) { return StartOfRound.Instance.allPlayerScripts.Where(x => x.actualClientId == id).First(); }
@@ -40,36 +43,42 @@ namespace CoolPeopleMod
         // Configs
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         // GlitchPlush Configs
+        public static ConfigEntry<bool> configGlitchPlushEnable;
         public static ConfigEntry<string> configGlitchPlushLevelRarities;
         public static ConfigEntry<string> configGlitchPlushCustomLevelRarities;
         public static ConfigEntry<int> configGlitchPlushMinValue;
         public static ConfigEntry<int> configGlitchPlushMaxValue;
 
         // PinataPlush Configs
+        public static ConfigEntry<bool> configPinataPlushEnable;
         public static ConfigEntry<string> configPinataPlushLevelRarities;
         public static ConfigEntry<string> configPinataPlushCustomLevelRarities;
         public static ConfigEntry<int> configPinataPlushMinValue;
         public static ConfigEntry<int> configPinataPlushMaxValue;
 
         // SCP999Plush Configs
+        public static ConfigEntry<bool> configSCP999PlushEnable;
         public static ConfigEntry<string> configSCP999PlushLevelRarities;
         public static ConfigEntry<string> configSCP999PlushCustomLevelRarities;
         public static ConfigEntry<int> configSCP999PlushMinValue;
         public static ConfigEntry<int> configSCP999PlushMaxValue;
 
         // DiceMimicPlush Configs
+        public static ConfigEntry<bool> configDiceMimicPlushEnable;
         public static ConfigEntry<string> configDiceMimicPlushLevelRarities;
         public static ConfigEntry<string> configDiceMimicPlushCustomLevelRarities;
         public static ConfigEntry<int> configDiceMimicPlushMinValue;
         public static ConfigEntry<int> configDiceMimicPlushMaxValue;
 
         // RatPlush Configs
+        public static ConfigEntry<bool> configRatPlushEnable;
         public static ConfigEntry<string> configRatPlushLevelRarities;
         public static ConfigEntry<string> configRatPlushCustomLevelRarities;
         public static ConfigEntry<int> configRatPlushMinValue;
         public static ConfigEntry<int> configRatPlushMaxValue;
 
         // FunoPlush Configs
+        public static ConfigEntry<bool> configFunoPlushEnable;
         public static ConfigEntry<string> configFunoPlushLevelRarities;
         public static ConfigEntry<string> configFunoPlushCustomLevelRarities;
         public static ConfigEntry<int> configFunoPlushMinValue;
@@ -93,36 +102,42 @@ namespace CoolPeopleMod
             // Configs
 
             // GlitchPlush Configs
+            configGlitchPlushEnable = Config.Bind("GlitchPlush", "Enable", true, "Set to false to prevent loading assets");
             configGlitchPlushLevelRarities = Config.Bind("GlitchPlush", "Level Rarities", "All: 10", "Rarities for each level. See default for formatting.");
             configGlitchPlushCustomLevelRarities = Config.Bind("GlitchPlush", "Custom Level Rarities", "", "Rarities for modded levels. Same formatting as level rarities.");
             configGlitchPlushMinValue = Config.Bind("GlitchPlush", "Min Value", 150, "Minimum scrap value.");
             configGlitchPlushMaxValue = Config.Bind("GlitchPlush", "Max Value", 200, "Maximum scrap value.");
 
             // PinataPlush Configs
+            configPinataPlushEnable = Config.Bind("PinataPlush", "Enable", true, "Set to false to prevent loading assets");
             configPinataPlushLevelRarities = Config.Bind("PinataPlush", "Level Rarities", "All: 10", "Rarities for each level. See default for formatting.");
             configPinataPlushCustomLevelRarities = Config.Bind("PinataPlush", "Custom Level Rarities", "", "Rarities for modded levels. Same formatting as level rarities.");
             configPinataPlushMinValue = Config.Bind("PinataPlush", "Min Value", 150, "Minimum scrap value.");
             configPinataPlushMaxValue = Config.Bind("PinataPlush", "Max Value", 200, "Maximum scrap value.");
 
             // SCP999Plush Configs
+            configSCP999PlushEnable = Config.Bind("SCP999Plush", "Enable", true, "Set to false to prevent loading assets");
             configSCP999PlushLevelRarities = Config.Bind("SCP999Plush", "Level Rarities", "All: 10", "Rarities for each level. See default for formatting.");
             configSCP999PlushCustomLevelRarities = Config.Bind("SCP999Plush", "Custom Level Rarities", "", "Rarities for modded levels. Same formatting as level rarities.");
             configSCP999PlushMinValue = Config.Bind("SCP999Plush", "Min Value", 150, "Minimum scrap value.");
             configSCP999PlushMaxValue = Config.Bind("SCP999Plush", "Max Value", 200, "Maximum scrap value.");
 
             // DiceMimicPlush Configs
+            configDiceMimicPlushEnable = Config.Bind("DiceMimicPlush", "Enable", true, "Set to false to prevent loading assets");
             configDiceMimicPlushLevelRarities = Config.Bind("DiceMimicPlush", "Level Rarities", "All: 10", "Rarities for each level. See default for formatting.");
             configDiceMimicPlushCustomLevelRarities = Config.Bind("DiceMimicPlush", "Custom Level Rarities", "", "Rarities for modded levels. Same formatting as level rarities.");
             configDiceMimicPlushMinValue = Config.Bind("DiceMimicPlush", "Min Value", 150, "Minimum scrap value.");
             configDiceMimicPlushMaxValue = Config.Bind("DiceMimicPlush", "Max Value", 200, "Maximum scrap value.");
 
             // RatPlush Configs
+            configRatPlushEnable = Config.Bind("RatPlush", "Enable", true, "Set to false to prevent loading assets");
             configRatPlushLevelRarities = Config.Bind("RatPlush", "Level Rarities", "All: 12", "Rarities for each level. See default for formatting.");
             configRatPlushCustomLevelRarities = Config.Bind("RatPlush", "Custom Level Rarities", "", "Rarities for modded levels. Same formatting as level rarities.");
             configRatPlushMinValue = Config.Bind("RatPlush", "Min Value", 150, "Minimum scrap value.");
             configRatPlushMaxValue = Config.Bind("RatPlush", "Max Value", 200, "Maximum scrap value.");
 
             // FunoPlush Configs
+            configFunoPlushEnable = Config.Bind("FunoPlush", "Enable", true, "Set to false to prevent loading assets");
             configFunoPlushLevelRarities = Config.Bind("FunoPlush", "Level Rarities", "All: 8", "Rarities for each level. See default for formatting.");
             configFunoPlushCustomLevelRarities = Config.Bind("FunoPlush", "Custom Level Rarities", "", "Rarities for modded levels. Same formatting as level rarities.");
             configFunoPlushMinValue = Config.Bind("FunoPlush", "Min Value", 150, "Minimum scrap value.");
@@ -141,81 +156,32 @@ namespace CoolPeopleMod
             }
             LoggerInstance.LogDebug($"Got AssetBundle at: {Path.Combine(sAssemblyLocation, "cool_assets")}");
 
-            // GlitchPlush
-            Item GlitchPlush = ModAssets.LoadAsset<Item>("Assets/ModAssets/Glitch/GlitchPlushItem.asset");
-            if (GlitchPlush == null) { LoggerInstance.LogError("Error: Couldnt get GlitchPlush from assets"); return; }
-            LoggerInstance.LogDebug($"Got GlitchPlush prefab");
-
-            GlitchPlush.minValue = configGlitchPlushMinValue.Value;
-            GlitchPlush.maxValue = configGlitchPlushMaxValue.Value;
-
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(GlitchPlush.spawnPrefab);
-            Utilities.FixMixerGroups(GlitchPlush.spawnPrefab);
-            LethalLib.Modules.Items.RegisterScrap(GlitchPlush, GetLevelRarities(configGlitchPlushLevelRarities.Value), GetCustomLevelRarities(configGlitchPlushCustomLevelRarities.Value));
-
-            // PinataPlush
-            Item PinataPlush = ModAssets.LoadAsset<Item>("Assets/ModAssets/Snowy/PinataPlushItem.asset");
-            if (PinataPlush == null) { LoggerInstance.LogError("Error: Couldnt get PinataPlush from assets"); return; }
-            LoggerInstance.LogDebug($"Got PinataPlush prefab");
-
-            PinataPlush.minValue = configPinataPlushMinValue.Value;
-            PinataPlush.maxValue = configPinataPlushMaxValue.Value;
-
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(PinataPlush.spawnPrefab);
-            Utilities.FixMixerGroups(PinataPlush.spawnPrefab);
-            LethalLib.Modules.Items.RegisterScrap(PinataPlush, GetLevelRarities(configPinataPlushLevelRarities.Value), GetCustomLevelRarities(configPinataPlushCustomLevelRarities.Value));
-
-            // SCP999Plush
-            Item SCP999Plush = ModAssets.LoadAsset<Item>("Assets/ModAssets/Lizzie/SCP999PlushItem.asset");
-            if (SCP999Plush == null) { LoggerInstance.LogError("Error: Couldnt get SCP999Plush from assets"); return; }
-            LoggerInstance.LogDebug($"Got SCP999Plush prefab");
-
-            SCP999Plush.minValue = configSCP999PlushMinValue.Value;
-            SCP999Plush.maxValue = configSCP999PlushMaxValue.Value;
-
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(SCP999Plush.spawnPrefab);
-            Utilities.FixMixerGroups(SCP999Plush.spawnPrefab);
-            LethalLib.Modules.Items.RegisterScrap(SCP999Plush, GetLevelRarities(configSCP999PlushLevelRarities.Value), GetCustomLevelRarities(configSCP999PlushCustomLevelRarities.Value));
-
-            // DiceMimicPlush
-            Item DiceMimicPlush = ModAssets.LoadAsset<Item>("Assets/ModAssets/Slayer/DiceMimicItem.asset");
-            if (DiceMimicPlush == null) { LoggerInstance.LogError("Error: Couldnt get DiceMimicPlush from assets"); return; }
-            LoggerInstance.LogDebug($"Got DiceMimicPlush prefab");
-
-            DiceMimicPlush.minValue = configDiceMimicPlushMinValue.Value;
-            DiceMimicPlush.maxValue = configDiceMimicPlushMaxValue.Value;
-
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(DiceMimicPlush.spawnPrefab);
-            Utilities.FixMixerGroups(DiceMimicPlush.spawnPrefab);
-            LethalLib.Modules.Items.RegisterScrap(DiceMimicPlush, GetLevelRarities(configDiceMimicPlushLevelRarities.Value), GetCustomLevelRarities(configDiceMimicPlushCustomLevelRarities.Value));
-
-            // RatPlush
-            Item RatPlush = ModAssets.LoadAsset<Item>("Assets/ModAssets/Rat/RatPlushItem.asset");
-            if (RatPlush == null) { LoggerInstance.LogError("Error: Couldnt get RatPlush from assets"); return; }
-            LoggerInstance.LogDebug($"Got RatPlush prefab");
-
-            RatPlush.minValue = configRatPlushMinValue.Value;
-            RatPlush.maxValue = configRatPlushMaxValue.Value;
-
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(RatPlush.spawnPrefab);
-            Utilities.FixMixerGroups(RatPlush.spawnPrefab);
-            LethalLib.Modules.Items.RegisterScrap(RatPlush, GetLevelRarities(configRatPlushLevelRarities.Value), GetCustomLevelRarities(configRatPlushCustomLevelRarities.Value));
-
-            // FunoPlush
-            Item FunoPlush = ModAssets.LoadAsset<Item>("Assets/ModAssets/Funo/FunoPlushItem.asset");
-            if (FunoPlush == null) { LoggerInstance.LogError("Error: Couldnt get FunoPlush from assets"); return; }
-            LoggerInstance.LogDebug($"Got FunoPlush prefab");
-
-            FunoPlush.minValue = configFunoPlushMinValue.Value;
-            FunoPlush.maxValue = configFunoPlushMaxValue.Value;
-
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(FunoPlush.spawnPrefab);
-            Utilities.FixMixerGroups(FunoPlush.spawnPrefab);
-            LethalLib.Modules.Items.RegisterScrap(FunoPlush, GetLevelRarities(configFunoPlushLevelRarities.Value), GetCustomLevelRarities(configFunoPlushCustomLevelRarities.Value));
+            RegisterScrap(configGlitchPlushEnable, "Assets/ModAssets/Glitch/GlitchPlushItem.asset", configGlitchPlushLevelRarities, configGlitchPlushCustomLevelRarities, configGlitchPlushMinValue, configGlitchPlushMaxValue);
+            RegisterScrap(configPinataPlushEnable, "Assets/ModAssets/Snowy/PinataPlushItem.asset", configPinataPlushLevelRarities, configPinataPlushCustomLevelRarities, configPinataPlushMinValue, configPinataPlushMaxValue);
+            RegisterScrap(configSCP999PlushEnable, "Assets/ModAssets/Lizzie/SCP999PlushItem.asset", configSCP999PlushLevelRarities, configSCP999PlushCustomLevelRarities, configSCP999PlushMinValue, configSCP999PlushMaxValue);
+            RegisterScrap(configDiceMimicPlushEnable, "Assets/ModAssets/Slayer/DiceMimicItem.asset", configDiceMimicPlushLevelRarities, configDiceMimicPlushCustomLevelRarities, configDiceMimicPlushMinValue, configDiceMimicPlushMaxValue);
+            RegisterScrap(configRatPlushEnable, "Assets/ModAssets/Rat/RatPlushItem.asset", configRatPlushLevelRarities, configRatPlushCustomLevelRarities, configRatPlushMinValue, configRatPlushMaxValue);
+            RegisterScrap(configFunoPlushEnable, "Assets/ModAssets/Funo/FunoPlushItem.asset", configFunoPlushLevelRarities, configFunoPlushCustomLevelRarities, configFunoPlushMinValue, configFunoPlushMaxValue);
 
 
             // Finished
             Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
+        }
+
+        public void RegisterScrap(ConfigEntry<bool> enabled, string assetPath, ConfigEntry<string> levelRarities, ConfigEntry<string> customLevelRarities, ConfigEntry<int> minValue, ConfigEntry<int> maxValue)
+        {
+            if (!enabled.Value) { return; }
+
+            Item item = ModAssets!.LoadAsset<Item>(assetPath);
+            if (item == null) { LoggerInstance.LogError("Error: Couldnt get assets from path: " + assetPath); return; }
+            LoggerInstance.LogDebug($"Got {item.name} prefab");
+
+            item.minValue = minValue.Value;
+            item.maxValue = maxValue.Value;
+
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(item.spawnPrefab);
+            Utilities.FixMixerGroups(item.spawnPrefab);
+            LethalLib.Modules.Items.RegisterScrap(item, GetLevelRarities(levelRarities.Value), GetCustomLevelRarities(customLevelRarities.Value));
         }
 
         public Dictionary<Levels.LevelTypes, int> GetLevelRarities(string levelsString)
