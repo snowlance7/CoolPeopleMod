@@ -34,27 +34,8 @@ namespace CoolPeopleMod.Items.PinataPlush
             {
                 previousPlayerHeldBy = playerHeldBy;
             }
-        }
 
-        public override void EquipItem()
-        {
-            base.EquipItem();
-            if (playerHeldBy == null) { return; }
-            playerHeldBy.equippedUsableItemQE = true;
-        }
-
-        public override void DiscardItem()
-        {
-            base.DiscardItem();
-            if (previousPlayerHeldBy == null) { return; }
-            previousPlayerHeldBy.equippedUsableItemQE = false;
-        }
-
-        public override void PocketItem()
-        {
-            base.PocketItem();
-            if (previousPlayerHeldBy == null) { return; }
-            previousPlayerHeldBy.equippedUsableItemQE = false;
+            localPlayer.equippedUsableItemQE = previousPlayerHeldBy != null && localPlayer == previousPlayerHeldBy;
         }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
